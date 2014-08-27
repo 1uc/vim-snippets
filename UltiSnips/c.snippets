@@ -20,11 +20,11 @@ ${VISUAL}${0}
 #endif
 endsnippet
 
-snippet inc "#include local header (inc)"
+snippet Inc "#include local header (inc)"
 #include "${1:`!p snip.rv = snip.basename + '.h'`}"
 endsnippet
 
-snippet Inc "#include <> (Inc)"
+snippet inc "#include <> (Inc)"
 #include <${1:.h}>
 endsnippet
 
@@ -38,23 +38,20 @@ $0
 endsnippet
 
 snippet main "main() (main)"
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]){
 	${VISUAL}${0}
 	return 0;
 }
 endsnippet
 
 snippet for "for loop (for)"
-for (${2:i} = 0; $2 < ${1:count}; ${3:++$2})
-{
+for (${2:i} = 0; $2 < ${1:count}; ${3:++$2}) {
 	${VISUAL}${0}
 }
 endsnippet
 
 snippet fori "for int loop (fori)"
-for (${4:int} ${2:i} = 0; $2 < ${1:count}; ${3:++$2})
-{
+for (${4:int} ${2:i} = 0; $2 < ${1:count}; ${3:++$2}) {
 	${VISUAL}${0}
 }
 endsnippet
@@ -64,6 +61,11 @@ enum ${1:name} { $0 };
 endsnippet
 
 snippet once "Include header once only guard"
+/* $2
+ *
+ * Authors: Luc Grosheintz <forbugrep@zoho.com>
+ *    Date: `date -I`
+ */
 #ifndef ${1:`!p
 if not snip.c:
 	import random, string
@@ -84,8 +86,8 @@ snippet td "Typedef"
 typedef ${1:int} ${2:MyCustomType};
 endsnippet
 
-snippet wh "while loop"
-while(${1:/* condition */}) {
+snippet while "while loop"
+while (${1:/* condition */}) {
 	${VISUAL}${0}
 }
 endsnippet
@@ -101,8 +103,7 @@ fprintf(${1:stderr}, "${2:%s}\n"${2/([^%]|%%)*(%.)?.*/(?2:, :\);)/}$3${2/([^%]|%
 endsnippet
 
 snippet if "if .. (if)"
-if (${1:/* condition */})
-{
+if (${1:/* condition */}) {
 	${VISUAL}${0}
 }
 endsnippet
@@ -120,12 +121,10 @@ else if (${1:/* condition */}) {
 endsnippet
 
 snippet ife "if .. else (ife)"
-if (${1:/* condition */})
-{
+if (${1:/* condition */}) {
 	${2}
 }
-else
-{
+else {
 	${3:/* else */}
 }
 endsnippet
@@ -135,15 +134,13 @@ printf("${1:%s}\n"${1/([^%]|%%)*(%.)?.*/(?2:, :\);)/}$2${1/([^%]|%%)*(%.)?.*/(?2
 endsnippet
 
 snippet st "struct"
-struct ${1:`!p snip.rv = (snip.basename or "name") + "_t"`}
-{
+struct ${1:`!p snip.rv = (snip.basename or "name") + "_t"`}{
 	${0:/* data */}
 };
 endsnippet
 
 snippet fun "function" b
-${1:void} ${2:function_name}(${3})
-{
+${1:void} ${2:function_name}(${3}){
 	${VISUAL}${0}
 }
 endsnippet

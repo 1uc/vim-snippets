@@ -9,17 +9,33 @@ snippet "b(egin)?" "begin{} / end{}" br
 endsnippet
 
 snippet tab "tabular / array environment" b
-\begin{${1:t}${1/(t)$|(a)$|(.*)/(?1:abular)(?2:rray)/}}{${2:c}}
-$0${2/((?<=.)c|l|r)|./(?1: & )/g}
-\end{$1${1/(t)$|(a)$|(.*)/(?1:abular)(?2:rray)/}}
+\begin{table}
+	\begin{center}
+		\caption{$2}
+		\label{tab:${2/(\w+)\.\w+/$1/}}
+		\begin{tabular}{$3}
+			\hline
+			\hline
+			$4 \\
+			\hline
+			$5
+			\hline
+			\hline
+		\end{tabular}\\
+	\end{center}
+\end{table}
 endsnippet
 
 snippet fig "Figure environment" b
-\begin{figure}${2:[htpb]}
-	\centering
-	\includegraphics[width=${3:0.8}\linewidth]{${4:name.ext}}
-	\caption{${4/(\w+)\.\w+/\u$1/}$0}
-	\label{fig:${4/(\w+)\.\w+/$1/}}
+\begin{figure}[ht]
+	\begin{center}
+		%\vspace{0.2in}
+		\includegraphics[width=\columnwidth]{$2.eps}
+	\end{center}
+	\vspace{-0.2in}
+	\caption{$3}
+	\label{fig:${2/(\w+)\.\w+/$1/}}
+	%\vspace{0.1in}
 \end{figure}
 endsnippet
 
@@ -107,4 +123,194 @@ endsnippet
 snippet lp "Long parenthesis"
 \left(${1:${VISUAL:contents}}\right)$0
 endsnippet
+
+snippet article "ApJ style preamble"
+\documentclass{emulateapj}
+\usepackage{graphicx}
+\usepackage{amssymb,amsfonts,amsmath,amstext,amsgen,amsopn,amsxtra,indentfirst,times}
+
+\usepackage{mathtools}
+
+\begin{document}
+
+\title{$1}
+\author{${2:Luc Grosheintz-Laval}\altaffilmark{1}}
+\author{${3:Kevin Heng}\altaffilmark{1}}
+\altaffiltext{1}{University of Bern, Center for Space and Habitability, Sidlerstrasse 5, CH-3012, Bern, Switzerland.  Email: luc.grosheintz@csh.unibe.ch, kevin.heng@csh.unibe.ch}
+
+\begin{abstract}
+tbd
+\end{abstract}
+
+\keywords{$4}
+
+\section{Introduction}
+\label{sec:introduction}
+
+$0
+
+\end{document}
+endsnippet
+
+snippet extrapackages "Extra LaTeX packages"
+%% Easier formatting of references.
+\usepackage[
+  style=numeric,
+  url=true,
+  eprint=false,
+  isbn=false
+  ]{biblatex}
+\addbibresource{refs.bib}
+\usepackage{xpatch}
+\AtEveryBibitem{%
+  \ifentrytype{manual}{%
+  }{%
+    \clearfield{url}%
+  }%
+}
+\AtEveryBibitem{\clearlist{language}}
+\renewbibmacro{in:}{}
+
+% normal 4(14) for volume(number)
+\xpatchbibmacro{volume+number+eid}{%
+  \setunit*{\adddot}%
+}{%
+}{}{}
+\DeclareFieldFormat[article]{volume}{\textbf{#1}}
+\DeclareFieldFormat[article]{number}{\mkbibparens{#1}}
+
+%% [REC] Intelligent cross reference package. This allows for nice
+%% combined references that include the reference and a hint to where
+%% to look for it.
+\usepackage{varioref}
+
+%% [OPT] Easily changeable quotes with \enquote{Text}
+%\usepackage[german=swiss]{csquotes}
+
+%% [REC] Format dates and time depending on locale
+\usepackage{datetime}
+
+%% [OPT] Provides a \cancel{} command to stroke through mathematics.
+%\usepackage{cancel}
+
+%% [ADV] Conditional commands
+%\usepackage{ifthen}
+
+%% [OPT] Manual large braces or other delimiters.
+%\usepackage{bigdelim, bigstrut}
+
+%% [REC] Alternate vector arrows. Use the command \vv{} to get scaled
+%% vector arrows.
+% \usepackage[h]{esvect}
+
+%% [NEED] Some extensions to tabulars and array environments.
+\usepackage{array}
+
+%% easy small roman enumerate
+\usepackage{enumerate}
+
+%% [OPT] Postscript support via pstricks graphics package. Very
+%% diverse applications.
+%\usepackage{pstricks,pst-all}
+
+%% [?] This seems to allow us to define some additional counters.
+%\usepackage{etex}
+
+%% [ADV] XY-Pic to typeset some matrix-style graphics
+%\usepackage[all]{xy}
+
+%% [OPT] This is needed to generate an index at the end of the
+%% document.
+%\usepackage{makeidx}
+
+%% get hold of some colors
+\usepackage{color}
+
+%% [OPT] Fancy package for source code listings.  The template text
+%% needs it for some LaTeX snippets; remove/adapt the \lstset when you
+%% remove the template content.
+% \definecolor{commentcolor}{RGB}{64,64,64}
+% \usepackage{listings}
+% \lstset{ %
+%   language=Python,
+%   basicstyle={\footnotesize\normalfont\ttfamily},
+%   commentstyle=\slshape\color{commentcolor},
+%   keywordstyle=\bfseries,
+%   showstringspaces=False
+% }
+
+%% Pygments based source code highlighting
+\usepackage{minted}
+
+%% [REC] Typeset algoritms
+% \usepackage{algorithm2e}
+
+%% [REC] Fancy character protrusion.  Must be loaded after all fonts.
+\usepackage[activate]{pdfcprot}
+
+%% [REC] Nicer tables.  Read the excellent documentation.
+\usepackage{booktabs}
+
+%% [REC] .-aligned columns
+\usepackage{dcolumn}
+\newcolumntype{d}{D{.}{.}{-1}}
+
+%% [OPT] Allow file names with .s inside, i.e. 'img/foo.rnd42.0000.png'
+\usepackage{grffile}
+
+%% [OPT] Some nice accents
+\usepackage{accents}
+$1
+endsnippet
+
+snippet macros "Short hand notation"
+%% Fixed/scaling delimiter examples (see mathtools documentation)
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}
+
+%% Use the alternative epsilon per default and define the old one as \oldepsilon
+\let\oldepsilon\epsilon
+\renewcommand{\epsilon}{\ensuremath\varepsilon}
+
+%% Also set the alternate phi as default.
+\let\oldphi\phi
+\renewcommand{\phi}{\ensuremath{\varphi}}
+
+%% Special characters for number sets, e.g. real or complex numbers.
+\newcommand{\IN}{\mathbb{N}}
+\newcommand{\IZ}{\mathbb{Z}}
+\newcommand{\IQ}{\mathbb{Q}}
+\newcommand{\IR}{\mathbb{R}}
+\newcommand{\IC}{\mathbb{C}}
+
+%% Differential operators
+\newcommand{\pd}[2][]{\ensuremath{\partial_{#1}{#2}}}
+\newcommand{\fd}[2][]{\ensuremath{\frac{d}{d#1}{#2}}}
+\renewcommand{\div}[2][]{\ensuremath{\nabla_{#1}\cdot #2}}
+\newcommand{\hdiv}[1]{\div[h]{#1}}
+\newcommand{\grad}[2][]{\ensuremath{\nabla_{#1}#2}}
+
+%% Set theory
+\newcommand{\bdd}[1]{\partial #1}
+\newcommand{\interior}[1]{\mathring{#1}}   % interior of set
+\newcommand{\cl}[1]{\mkern 1.5mu\overline{\mkern-1.5mu#1\mkern-1.5mu}\mkern1.5mu}
+
+%% Named functions
+\newcommand{\identical}{\equiv}
+\newcommand{\bigO}{\mathcal{O}}
+
+%% Vector calculus
+\renewcommand{\vec}[1]{\ensuremath{\boldsymbol{#1}}}
+\newcommand{\uvec}[1]{\ensuremath{\boldsymbol{\hat{#1}}}}
+$1
+endsnippet
+
+snippet slides "Preamble for Beamer slides (EEG-style)." b
+
+endsnippet
+
+snippet si "\SI{num}{units}" w
+\SI{$1}{$2}$0
+endsnippet
+
 # vim:ft=snippets:
